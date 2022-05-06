@@ -33,7 +33,7 @@ def nuc2aa(nuli_string, start_codon):
 	start_codon = int(start_codon) - 1
 	nuli_string = "".join(nuli_string.split()).upper()
 	nuli_string = str(nuli_string)[start_codon:]
-	if len(nuli_string) % 3 == 0:
+	if len(nuli_string) % 3 == 0:                           ###check codon
 		for i in range(0,len(nuli_string),3):
 			target_nuli = nuli_string[i:i+3]
 			if target_nuli in aa_dict.keys():
@@ -45,6 +45,11 @@ def nuc2aa(nuli_string, start_codon):
 	else:
 		return ""
 
+def nuc(nuli_string, start_codon):
+	start_codon = int(start_codon) - 1
+	nuli_string = "".join(nuli_string.split()).upper()
+	nuli_string = str(nuli_string)[start_codon:]
+	return nuli_string
 
 
 
@@ -154,7 +159,7 @@ for line in gb.readlines():
 			for i in [1,2,3,4]:
 				if strain_info != None:
 					if strain_info.group(i) != None:
-						print(">" + LOCUS, strain_info.group(i), Country.group(1),Date.group(1),length,GP85,
+						print(">" + LOCUS, strain_info.group(i),Codon, Country.group(1),Date.group(1),length,GP85,
 								GP85_annotation[0],GP85_annotation[1],GP37,GP37_annotation[0],GP37_annotation[1])
 						del strain_info 
 						del Country
@@ -165,7 +170,7 @@ for line in gb.readlines():
 						del GP37_annotation
 						break
 		else:
-			print(">" + LOCUS, "NA", Country.group(1),Date.group(1),length,GP85,
+			print(">" + LOCUS, "NA",Codon, Country.group(1),Date.group(1),length,GP85,
 					GP85_annotation[0],GP85_annotation[1],GP37,GP37_annotation[0], GP37_annotation[1])
 			del Country 
 			del Date
@@ -178,6 +183,8 @@ for line in gb.readlines():
 				print(Pep)
 			else:
 				print(nuc2aa(nuli_str,Codon))
+		if mode == "fa":
+			print(nuc(nuli_str,Codon))
 		del nuli_str
 		del Pep	
 		del default_length
