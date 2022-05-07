@@ -1,4 +1,6 @@
-
+import sys
+import re
+from Bio import SeqIO
 aa_dict = {	
 				'GCA' : 'A', 'GCC' : 'A', 'GCG' : 'A', 'GCT' : 'A',                               # Alanine
 				'TGC' : 'C', 'TGT' : 'C',                                                           # Cysteine
@@ -22,3 +24,24 @@ aa_dict = {
 				'TAC' : 'Y', 'TAT' : 'Y',                                                           # Tyrosine
 				'TAA' : 'U', 'TAG' : 'U', 'TGA' : 'U'                                              # Stop
 				}
+
+def cds2aa(seq):
+	seq = str(seq)
+	length = len(seq)
+	aa_seq = ""
+	for i in range(0,(length - 1),3):
+		start = i
+		end = i + 3
+		codon = seq[start:end].upper()
+		aa = aa_dict[f"{codon}"]
+		aa_seq = aa_seq + aa
+	return aa_seq
+
+
+
+fa_dict = SeqIO.to_dict(SeqIO.parse(f"{sys.argv[1]}","fasta"))
+for key, val in fa_dict.items():
+	if key in rm_list:
+		continue
+	print(">" + key)
+	print(cds2aa(val.seq))
