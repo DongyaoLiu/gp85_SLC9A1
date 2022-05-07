@@ -33,7 +33,10 @@ def cds2aa(seq):
 		start = i
 		end = i + 3
 		codon = seq[start:end].upper()
-		aa = aa_dict[f"{codon}"]
+		if codon in  aa_dict.keys():
+			aa = aa_dict[f"{codon}"]
+		else: 
+			aa = "N"
 		aa_seq = aa_seq + aa
 	return aa_seq
 
@@ -41,7 +44,5 @@ def cds2aa(seq):
 
 fa_dict = SeqIO.to_dict(SeqIO.parse(f"{sys.argv[1]}","fasta"))
 for key, val in fa_dict.items():
-	if key in rm_list:
-		continue
 	print(">" + key)
 	print(cds2aa(val.seq))
